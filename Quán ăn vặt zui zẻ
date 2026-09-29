@@ -1,0 +1,89 @@
+QUÁN ĂN VẶT - BẢN THỬ NGHIỆM : 
+import random
+
+class QuanAnVat:
+    def __init__(self):
+        # Menu món ăn và giá tiền
+        self.menu = {
+            "Bánh tráng trộn": 20000,
+            "Cá viên chiên": 25000,
+            "Trà sữa": 20000,
+            "Phô mai que": 15000
+        }
+        # Các món có thể mở khóa sau
+        self.menu_khoa = {
+            "Mì cay": 45000,
+            "Gà rán": 50000
+        }
+        self.doanh_thu = 0
+        self.so_khach_da_phuc_vu = 0
+
+    def hien_thi_menu(self):
+        print("\n--- MENU QUÁN ĂN VẶT ---")
+        for mon, gia in self.menu.items():
+            print(f"- {mon}: {gia:,} VNĐ")
+        print("------------------------")
+
+    def don_khach(self):
+        print("\n🏪 Có một vị khách mới bước vào quán!")
+        self.hien_thi_menu()
+        
+        # Khách chọn ngẫu nhiên từ 1 đến 2 món trong menu hiện tại
+        so_luong_mon = random.randint(1, 2)
+        cac_mon_co_san = list(self.menu.keys())
+        mon_chon = random.sample(cac_mon_co_san, so_luong_mon)
+        
+        tong_tien = 0
+        print("🛒 Khách gọi món:")
+        for mon in mon_chon:
+            gia = self.menu[mon]
+            tong_tien += gia
+            print(f"  + {mon} ({gia:,} VNĐ)")
+            
+        print(f"💰 Tổng hóa đơn: {tong_tien:,} VNĐ")
+        self.doanh_thu += tong_tien
+        self.so_khach_da_phuc_vu += 1
+        print("✔️ Phục vụ thành công! Khách đã thanh toán.")
+        
+        # Kiểm tra điều kiện mở khóa món ăn mới
+        self.kiem_tra_mo_khoa()
+
+    def kiem_tra_mo_khoa(self):
+        # Mở khóa Mì cay khi phục vụ đủ 3 khách
+        if self.so_khach_da_phuc_vu == 3 and "Mì cay" in self.menu_khoa:
+            self.menu["Mì cay"] = self.menu_khoa.pop("Mì cay")
+            print("\n🎉 Chúc mừng! Quán đã đạt đủ 3 khách, mở khóa món mới: Mì cay!")
+            
+        # Mở khóa Gà rán khi doanh thu đạt trên 100,000 VNĐ
+        if self.doanh_thu >= 100000 and "Gà rán" in self.menu_khoa:
+            self.menu["Gà rán"] = self.menu_khoa.pop("Gà rán")
+            print("\n🎉 Chúc mừng! Doanh thu đạt mốc mốc mới, mở khóa món mới: Gà rán!")
+
+    def xem_trang_thai(self):
+        print(f"\n📊 BÁO CÁO KINH DOANH:")
+        print(f"  - Tổng số khách: {self.so_khach_da_phuc_vu}")
+        print(f"  - Tổng doanh thu: {self.doanh_thu:,} VNĐ")
+
+# --- VÒNG LẶP CHÍNH CỦA TRÒ CHƠI ---
+def main():
+    quan_hang = QuanAnVat()
+    print("Welcome to Quan An Vat Manager v1.0!")
+    
+    while True:
+        print("\n[1] Đón khách mới")
+        print("[2] Xem doanh thu & tình hình quán")
+        print("[3] Thoát game")
+        lua_chon = input("Nhập lựa chọn của bạn (1-3): ")
+        
+        if lua_chon == "1":
+            quan_hang.don_khach()
+        elif lua_chon == "2":
+            quan_hang.xem_trang_thai()
+elif lua_chon == "3":
+            print("👋 Tạm biệt chủ quán! Hẹn gặp lại lần sau.")
+            break
+        else:
+            print("❌ Lựa chọn không hợp lệ, vui lòng nhập lại.")
+
+if __name__ == "__main__":
+    main()
